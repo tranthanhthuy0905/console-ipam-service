@@ -1,7 +1,7 @@
 from typing import List
 
 from .models import ResourceIP
-from .ipam import create_ips
+from .ipam import create_ips, delete_ips
 
 
 def resource_ip_create(
@@ -26,6 +26,10 @@ def resource_ip_delete(
         id: int
 ) -> ResourceIP:
     resource_ip = ResourceIP.objects.get(id=id)
+
+    ips = resource_ip.ips
+
+    delete_ips(ips)
 
     resource_ip.delete()
 
