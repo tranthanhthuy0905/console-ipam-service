@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  postgres_dev:
+    container_name: postgres_dev_container
+    image: postgres
+    env_file:
+      - ./dev_env
+    volumes:
+      - postgres-dev:/data/postgres
+    restart: unless-stopped
+  nginx_dev:
+    image: nginx:latest
+    container_name: nginx_dev_container
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/code
+      - ./config/nginx-dev:/etc/nginx/conf.d
+      - ./static:/static
+      - ./site:/site
+    depends_on:
+      - web_dev
+  web_dev:
+    container_name: web_dev_container
+    restart: always
+    env_file:
+      - ./dev_env
+    image: web-dev
+    build: ./
+    environment:
+      - DJANGO_CONFIGURATION=Development
+    command: >
+      bash -c "python wait_for_postgres.py &&
+               ./manage.py migrate &&
+               gunicorn --bind 0.0.0.0:8080 -w 4 --threads 4 --access-logfile - ep_ipam_api.wsgi:application"
+    volumes:
+      - ./:/code
+      - ./static:/static
+    expose:
+      - "8080"
+    depends_on:
+      - postgres_dev
+
+  redis_dev:
+    container_name: redis_dev_container
+    image: redis:alpine
+
+volumes:
+  postgres-dev:

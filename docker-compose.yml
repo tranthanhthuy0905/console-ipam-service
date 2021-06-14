@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: ipam_api_postgres
+    image: postgres
+    env_file:
+      - ./.env
+    volumes:
+      - ../db/postgres:/data/postgres
+    restart: unless-stopped
+    networks:
+      - prod
+  nginx:
+    image: nginx:latest
+    container_name: ipam_api_nginx
+    ports:
+      - "8880:80"
+    volumes:
+      - ./config/nginx:/etc/nginx/conf.d
+      - ./static:/static
+      - ./site:/site
+    depends_on:
+      - web
+    networks:
+      - prod
+  web:
+    container_name: ipam_api_web
+    restart: always
+    env_file:
+      - ./.env
+    image: ipam_api_web
+    build: ./
+    environment:
+      - DJANGO_CONFIGURATION=Production
+    command: >
+      sh -c "python wait_for_postgres.py &&
+             ./manage.py migrate &&
+             gunicorn --bind 0.0.0.0:8880 -w 4 --threads 4 --access-logfile - ep_ipam_api.wsgi:application"
+    volumes:
+      - ./:/code
+      - ./static:/static
+    expose:
+      - "8880"
+    depends_on:
+      - postgres
+    networks:
+      - prod
+
+  redis:
+    container_name: ipam_api_redis
+    image: redis:alpine
+    networks:
+      - prod
+
+volumes:
+  postgres:
+
+networks:
+  prod:
+    external:
+      name: ipam_api
