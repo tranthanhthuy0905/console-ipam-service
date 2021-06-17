@@ -1,8 +1,8 @@
-site_name: EP_S3_Documentatiion
-site_description: Documentation for S3 Service
+site_name: EP_IPAM_Documentatiion
+site_description: Documentation for IPAM Service
 site_dir: site
 copyright: Copyright &copy; 2020, EP.
-dev_addr: 0.0.0.0:8001
+dev_addr: 0.0.0.0:8000
 
 nav:
   - Home: 'index.md'

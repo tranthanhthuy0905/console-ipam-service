@@ -1,3 +1,9 @@
+""" Set up the error message in case of:
+- A function receives an argument with right type but wrong value
+- Run an operation without the adequate access rights
+- Wrong type input
+"""
+
 from rest_framework import exceptions as rest_exceptions
 from ..middlewares.custom_exception_handler import get_error_message
 from django.core.exceptions import ValidationError

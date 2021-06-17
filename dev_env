@@ -5,6 +5,3 @@ POSTGRES_HOST=postgres_dev
 PGDATA=/data/postgres
 DJANGO_SECRET_KEY=local
 DJANGO_CONFIGURATION=Development
-MINIO_HOST=https://s3-be.engineering.vng.vn
-MINIO_ACCESS_KEY=minio
-MINIO_SECRET_KEY=minio123

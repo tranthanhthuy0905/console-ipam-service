@@ -4,13 +4,29 @@ services:
   postgres:
     container_name: ipam_api_postgres
     image: postgres
+
+    # Config the env file to set the standard environment of running the container
     env_file:
       - ./.env
+
+    # Once the container is deleted, we still can access it locally via Volumes
     volumes:
       - ../db/postgres:/data/postgres
+
+    # The repeatable process of calling roll
     restart: unless-stopped
+
+    # Optional
     networks:
       - prod
+
+  # "Engine-ex" - open-source web server dev = event-driven + asynchronous
+  # 1 worker process controls the similar request flows. It contains worker connection:
+  # Workflow: Worker connection receives similar requests (1024) => send to worker connection + master connection
+  # => Master process (in nginx server) output the in4
+
+
+
   nginx:
     image: nginx:latest
     container_name: ipam_api_nginx

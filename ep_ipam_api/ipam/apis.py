@@ -1,3 +1,7 @@
+"""
+Solidate all the steps as Creating, Deleting, Listing + Tracking (Filtering) all the IP addresses
+"""
+
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
 from rest_framework import serializers, status
@@ -6,8 +10,11 @@ from rest_framework.response import Response
 from ..common.errors import ApiErrorsMixin
 from ..common.pagination import get_paginated_response, LimitOffsetPagination
 
+# Input the IP list
 from .selectors import resource_ip_list
+# Provide method of creating, deleting IP address
 from .services import resource_ip_create, resource_ip_delete
+# Provid a model to creat or deal with the IP input
 from .models import ResourceIP
 
 

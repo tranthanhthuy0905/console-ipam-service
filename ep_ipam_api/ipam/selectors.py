@@ -1,3 +1,7 @@
+"""
+Collect the IP information
+"""
+
 from .filters import BaseResourceIPFilter
 from .models import ResourceIP
 
